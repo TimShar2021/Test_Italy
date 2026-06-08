@@ -1,0 +1,7 @@
+italy_dwh:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "../../data/runtime/dwh.duckdb"
+      threads: 4

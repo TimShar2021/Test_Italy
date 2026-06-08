@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: mart_plan_fact_daily
+    description: Daily actuals vs plan for BI.
+    columns:
+      - name: revenue_date
+        tests: [not_null, unique]
+
+  - name: mart_channel_daily
+    description: Daily sales split by normalized channel group.
+    columns:
+      - name: revenue_date
+        tests: [not_null]
+      - name: channel_group
+        tests:
+          - accepted_values:
+              values: ['delivery', 'pickup', 'restaurant', 'banquet', 'other']
+
+  - name: mart_avg_check_by_order_type
+    description: Daily average check by original order type and normalized channel group.
+    columns:
+      - name: revenue_date
+        tests: [not_null]
+      - name: order_type
+        tests: [not_null]
+
+  - name: mart_dish_sales_daily
+    description: Daily dish-level revenue, excluding service items and zero-amount modifiers.
+    columns:
+      - name: revenue_date
+        tests: [not_null]
+      - name: dish_name
+        tests: [not_null]
+
+  - name: mart_dashboard_daily
+    description: Daily dashboard mart with actuals, plan, and previous-year comparison.
+    columns:
+      - name: revenue_date
+        tests: [not_null, unique]
+

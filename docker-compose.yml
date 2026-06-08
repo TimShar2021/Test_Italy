@@ -1,0 +1,49 @@
+x-project-env: &project-env
+  PROJECT_HOME: /opt/airflow/project
+  DBT_PROFILES_DIR: /opt/airflow/project/.dbt
+  SOURCE_XLSX_PATH: /opt/airflow/project/data/input/italy_test_task.xlsx
+  POS_SOURCE_DB_PATH: /opt/airflow/project/data/runtime/pos_source.duckdb
+  DWH_DB_PATH: /opt/airflow/project/data/runtime/dwh.duckdb
+
+x-project-volumes: &project-volumes
+  - ./:/opt/airflow/project
+  - ./dags:/opt/airflow/dags
+  - ./logs:/opt/airflow/logs
+
+services:
+  airflow:
+    build: .
+    container_name: italy-dwh-airflow
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      <<: *project-env
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
+      AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 30
+    volumes: *project-volumes
+    command: >
+      bash -c "
+      airflow db migrate &&
+      airflow users create --username admin --password admin --firstname Timur --lastname Sharafutdinov --role Admin --email admin@example.com || true &&
+      airflow scheduler &
+      exec airflow webserver
+      "
+
+  dashboard:
+    build: .
+    container_name: italy-dwh-dashboard
+    restart: unless-stopped
+    ports:
+      - "8050:8050"
+    environment:
+      <<: *project-env
+      DASHBOARD_HOST: 0.0.0.0
+      DASHBOARD_PORT: 8050
+    volumes: *project-volumes
+    depends_on:
+      - airflow
+    command: >
+      bash -c "exec python /opt/airflow/project/dashboard/app.py"

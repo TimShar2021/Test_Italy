@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: dim_date
+    columns:
+      - name: date_key
+        tests: [not_null, unique]
+
+  - name: dim_dish
+    columns:
+      - name: dish_key
+        tests: [not_null, unique]
+      - name: dish_name
+        tests: [not_null]
+
+  - name: dim_order_type
+    columns:
+      - name: order_type_key
+        tests: [not_null, unique]
+      - name: order_type
+        tests: [not_null]
+      - name: channel_group
+        tests:
+          - accepted_values:
+              values: ['delivery', 'pickup', 'restaurant', 'banquet', 'other']
+
+  - name: fact_check_items
+    description: Final version of each positive-quantity check item.
+    columns:
+      - name: check_item_key
+        tests: [not_null, unique]
+      - name: revenue_date
+        tests: [not_null]
+      - name: check_id
+        tests: [not_null]
+      - name: dish_key
+        tests: [not_null]
+      - name: order_type_key
+        tests: [not_null]
+
+  - name: cancelled_checks
+    description: Checks where all received versions had qty = 0.
+    columns:
+      - name: check_id
+        tests: [not_null, unique]

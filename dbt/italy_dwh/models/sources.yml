@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: stg_raw_checks
+        description: Raw POS check-item rows loaded incrementally from simulated DuckDB source database.
+      - name: stg_plan_daily
+        description: Daily plan loaded from Excel.
+      - name: etl_checkpoints
+        description: Source watermarks used by Python ingestion scripts.

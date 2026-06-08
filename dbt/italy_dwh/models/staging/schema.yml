@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_checks
+    description: Cleaned POS check-item rows before final-version deduplication.
+    columns:
+      - name: source_row_id
+        tests: [not_null, unique]
+      - name: accounting_date
+        tests: [not_null]
+      - name: check_id
+        tests: [not_null]
+      - name: dish_name
+        tests: [not_null]
+      - name: channel_group
+        tests:
+          - accepted_values:
+              values: ['delivery', 'pickup', 'restaurant', 'banquet', 'other']
+
+  - name: stg_plan_daily
+    description: Cleaned daily plan rows from Excel.
+    columns:
+      - name: plan_date
+        tests: [not_null, unique]
+      - name: plan_total_amount
+        tests: [not_null]

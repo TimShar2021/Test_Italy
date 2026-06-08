@@ -385,6 +385,9 @@ Plotly Dash dashboard читает данные из `data/runtime/dwh.duckdb`.
 - `mart.mart_channel_daily`
 - `mart.mart_dish_sales_daily`
 
+<img width="488" height="816" alt="image" src="https://github.com/user-attachments/assets/165790e5-37d2-47d6-b224-91e982f0b108" />
+
+
 ---
 
 ## 6. Полезные команды
